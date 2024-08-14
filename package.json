@@ -6,10 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "postinstall": "npm install --legacy-peer-deps",
-    "lint": "eslint .",
-    "format": "prettier --write ."
+    "start": "next start"
   },
   "dependencies": {
     "next": "^13.4.0",
@@ -18,7 +15,6 @@
     "node-fetch": "^3.3.1"
   },
   "devDependencies": {
-    "dotenv": "^16.0.3",
     "eslint": "^8.40.0",
     "prettier": "^3.0.0",
     "eslint-config-prettier": "^8.6.0",
