@@ -24,12 +24,13 @@ export default function SubmitOtp() {
       );
 
       if (response.data.statusCode === 200) {
-        // Ambil token jika ada dalam respons
-        const token = response.data.token; // Pastikan token disediakan oleh respons
-        if (token) {
-          localStorage.setItem('authToken', token); // Simpan token di localStorage
+        const { accessToken } = response.data; // Ambil accessToken dari respons
+        if (accessToken) {
+          localStorage.setItem('authToken', accessToken); // Simpan accessToken di localStorage
+          router.push('/check-quotas'); // Arahkan ke halaman cek kuota
+        } else {
+          alert('Failed to receive access token');
         }
-        router.push('/check-quotas'); // Arahkan ke halaman cek kuota
       } else {
         alert('Failed to submit OTP');
       }
@@ -48,7 +49,6 @@ export default function SubmitOtp() {
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
           required
-          placeholder="Enter OTP"
         />
         <button type="submit">Submit OTP</button>
       </form>
