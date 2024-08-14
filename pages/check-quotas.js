@@ -1,33 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 export default function CheckQuotas() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [quota, setQuota] = useState('');
-  const [token, setToken] = useState('');
-
-  useEffect(() => {
-    // Ambil token dari localStorage
-    const storedToken = localStorage.getItem('authToken');
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('authToken'); // Ambil token dari localStorage
+      if (!token) {
+        setError('No token found');
+        return;
+      }
+      
       const response = await axios.get(
         `https://srg-txl-utility-service.ext.dp.xl.co.id/v4/package/check/${phoneNumber}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`, // Tambahkan token ke header
           }
         }
       );
       setQuota(JSON.stringify(response.data));
+      setError('');
     } catch (error) {
-      setQuota('An error occurred while checking quota');
+      setError('An error occurred while checking quota');
       console.error(error);
     }
   };
@@ -40,12 +39,12 @@ export default function CheckQuotas() {
           type="text"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
-          placeholder="Phone Number"
           required
         />
         <button type="submit">Check Quota</button>
       </form>
       {quota && <pre>{quota}</pre>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 }
