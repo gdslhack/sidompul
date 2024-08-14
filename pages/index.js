@@ -5,7 +5,6 @@ import axios from 'axios';
 export default function Home() {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
-  const [token, setToken] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -49,10 +48,13 @@ export default function Home() {
         }
       );
 
+      console.log('API Response:', response.data); // Log respons API untuk memeriksa data
+
       if (response.data.statusCode === 200) {
-        const { accessToken } = response.data; // Ambil accessToken dari respons
+        const { accessToken } = response.data.result;
         if (accessToken) {
           localStorage.setItem('authToken', accessToken); // Simpan accessToken di localStorage
+          console.log('Token saved to localStorage:', accessToken); // Log token
           router.push('/check-quotas'); // Arahkan ke halaman cek kuota
         } else {
           setError('Failed to receive access token');
@@ -89,7 +91,6 @@ export default function Home() {
         />
         <button type="submit">Login</button>
       </form>
-      {token && <p>Token: {token}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
