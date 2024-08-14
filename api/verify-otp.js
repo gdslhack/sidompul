@@ -1,5 +1,7 @@
 import fetch from 'node-fetch';
 
+const imei = '354630570072013'; // Default IMEI
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -13,15 +15,13 @@ export default async function handler(req, res) {
 
   try {
     // Request OTP
-    const otpResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/`, {
+    const otpResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/OTP/${imei}?force=true`, {
       method: 'POST',
       headers: {
-        'x-dynatrace': 'MT_3_2_763403741_15-0_a5734da2-0ecb-4c8d-8d21-b008aeec4733_30_456_73',
-        'accept': 'application/json',
-        'authorization': 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
-        'language': 'en',
-        'version': '4.1.2',
-        'user-agent': 'okhttp/3.12.1',
+        'Accept': 'application/json',
+        'Authorization': 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
+        'Version': '6.1.1',
+        'User-Agent': 'okhttp/4.9.3',
       },
     });
 
@@ -31,15 +31,13 @@ export default async function handler(req, res) {
     }
 
     // Verify OTP
-    const loginResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/OTP/${otp}/354630570072013?force=true`, {
+    const loginResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/${otp}/${imei}?force=true`, {
       method: 'GET',
       headers: {
-        'x-dynatrace': 'MT_3_2_763403741_15-0_a5734da2-0ecb-4c8d-8d21-b008aeec4733_30_456_73',
-        'accept': 'application/json',
-        'authorization': 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
-        'language': 'en',
-        'version': '4.1.2',
-        'user-agent': 'okhttp/3.12.1',
+        'Accept': 'application/json',
+        'Authorization': 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
+        'Version': '6.1.1',
+        'User-Agent': 'okhttp/4.9.3',
       },
     });
 
