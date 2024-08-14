@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
   try {
     // Verify OTP to get access token
-    const otpResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v4/auth/email/${email}/${otp}/000000000000000`, {
+    const otpResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/${otp}/000000000000000`, {
       method: 'GET',
       headers: {
         'x-dynatrace': 'MT_3_2_763403741_15-0_a5734da2-0ecb-4c8d-8d21-b008aeec4733_30_456_73',
