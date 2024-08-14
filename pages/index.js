@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import axios from 'axios';
 
 export default function Home() {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState('');
-  const router = useRouter();
+  const [otp, setOtp] = useState('');
+  const [token, setToken] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleRequestOtp = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -23,31 +22,58 @@ export default function Home() {
           }
         }
       );
-
-      if (response.data.statusCode === 200) {
-        router.push(`/submit-otp?email=${encodeURIComponent(email)}`);
-      } else {
-        setStatus('Failed to request OTP');
-      }
+      console.log(response.data);
     } catch (error) {
-      setStatus('An error occurred while requesting OTP');
-      console.error(error);
+      console.error('Error requesting OTP:', error);
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(
+        `https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/${otp}/354630570072013?force=true`,
+        {
+          headers: {
+            Accept: 'application/json',
+            authorization: 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
+            version: '6.1.1',
+            'user-agent': 'okhttp/4.9.3',
+            Host: 'srg-txl-login-controller-service.ext.dp.xl.co.id'
+          }
+        }
+      );
+      setToken(response.data.token); // Simpan token dari response
+      // Redirect ke halaman cek kuota atau tampilkan form cek kuota
+    } catch (error) {
+      console.error('Error logging in:', error);
     }
   };
 
   return (
     <div>
-      <h1>Input Email</h1>
-      <form onSubmit={handleSubmit}>
+      <h1>Login</h1>
+      <form onSubmit={handleRequestOtp}>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
           required
         />
         <button type="submit">Request OTP</button>
       </form>
-      {status && <p>{status}</p>}
+      <form onSubmit={handleLogin}>
+        <input
+          type="text"
+          value={otp}
+          onChange={(e) => setOtp(e.target.value)}
+          placeholder="OTP"
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
+      {token && <p>Token: {token}</p>}
     </div>
   );
 }
