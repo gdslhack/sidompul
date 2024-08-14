@@ -50,12 +50,12 @@ export default function Home() {
       );
 
       if (response.data.statusCode === 200) {
-        const receivedToken = response.data.token; // Pastikan token di respons
-        if (receivedToken) {
-          localStorage.setItem('authToken', receivedToken); // Simpan token di localStorage
+        const { accessToken } = response.data; // Ambil accessToken dari respons
+        if (accessToken) {
+          localStorage.setItem('authToken', accessToken); // Simpan accessToken di localStorage
           router.push('/check-quotas'); // Arahkan ke halaman cek kuota
         } else {
-          setError('Failed to receive token');
+          setError('Failed to receive access token');
         }
       } else {
         setError('Failed to login with OTP');
