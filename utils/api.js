@@ -36,9 +36,14 @@ export const login = async (email, otp) => {
 };
 
 // Endpoint untuk cek kuota
-export const checkQuota = async (phoneNumber) => {
+export const checkQuota = async (phoneNumber, token) => {
   const response = await axios.get(
-    `https://srg-txl-utility-service.ext.dp.xl.co.id/v4/package/check/${phoneNumber}`
+    `https://srg-txl-utility-service.ext.dp.xl.co.id/v4/package/check/${phoneNumber}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}` // Tambahkan header otentikasi jika diperlukan
+      }
+    }
   );
   return response.data;
 };
