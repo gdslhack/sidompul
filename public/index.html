@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Masukkan Email</title>
+</head>
+<body>
+  <h1>Masukkan Email</h1>
+  <form id="email-form">
+    <label>Email:</label>
+    <input type="email" id="email" required><br>
+    <button type="submit">Kirim OTP</button>
+  </form>
+  <script>
+    document.getElementById('email-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      window.location.href = `/otp.html?email=${encodeURIComponent(email)}`;
+    });
+  </script>
+</body>
+</html>
