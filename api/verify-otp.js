@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
   try {
     // Request OTP
-    const otpResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/OTP/${imei}?force=true`, {
+    const otpResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
