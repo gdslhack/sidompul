@@ -23,7 +23,7 @@ export default function CheckQuotas() {
           }
         }
       );
-      setQuota(JSON.stringify(response.data));
+      setQuota(JSON.stringify(response.data, null, 2));
       setError('');
     } catch (error) {
       setError('An error occurred while checking quota');
