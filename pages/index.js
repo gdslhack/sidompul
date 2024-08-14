@@ -48,14 +48,11 @@ export default function Home() {
         }
       );
 
-      console.log('API Response:', response.data); // Log respons API untuk memeriksa data
-
       if (response.data.statusCode === 200) {
         const { accessToken } = response.data.result;
         if (accessToken) {
-          localStorage.setItem('authToken', accessToken); // Simpan accessToken di localStorage
-          console.log('Token saved to localStorage:', accessToken); // Log token
-          router.push('/check-quotas'); // Arahkan ke halaman cek kuota
+          console.log('Access Token:', accessToken); // Log token untuk pengujian
+          router.push('/submit-token'); // Arahkan ke halaman submit-token
         } else {
           setError('Failed to receive access token');
         }
