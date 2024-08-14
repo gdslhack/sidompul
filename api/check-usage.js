@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -12,24 +12,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Login
-    const loginResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v4/auth/email/${email}`, {
-      method: 'POST',
-      headers: {
-        'x-dynatrace': 'MT_3_2_763403741_15-0_a5734da2-0ecb-4c8d-8d21-b008aeec4733_30_456_73',
-        'accept': 'application/json',
-        'authorization': 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
-        'language': 'en',
-        'version': '4.1.2',
-        'user-agent': 'okhttp/3.12.1',
-      },
-    });
-    const loginData = await loginResponse.json();
-    if (loginData.statusCode !== 200) {
-      throw new Error(loginData.statusDescription);
-    }
-
-    // Verify OTP
+    // Verify OTP to get access token
     const otpResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v4/auth/email/${email}/${otp}/000000000000000`, {
       method: 'GET',
       headers: {
@@ -41,10 +24,12 @@ export default async function handler(req, res) {
         'user-agent': 'okhttp/3.12.1',
       },
     });
+
     const otpData = await otpResponse.json();
     if (otpData.statusCode !== 200) {
       throw new Error(otpData.statusDescription);
     }
+
     const accessToken = otpData.result.data.accessToken;
 
     // Check Data Usage
@@ -59,6 +44,7 @@ export default async function handler(req, res) {
         'user-agent': 'okhttp/3.12.1',
       },
     });
+
     const usageData = await usageResponse.json();
     if (usageData.statusCode !== 200) {
       throw new Error(usageData.statusDescription);
