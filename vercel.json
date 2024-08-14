@@ -3,10 +3,7 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/node",
-      "config": {
-        "distDir": ".next"
-      }
+      "use": "@vercel/next"
     }
   ],
   "routes": [
@@ -14,9 +11,5 @@
       "src": "/(.*)",
       "dest": "/$1"
     }
-  ],
-  "env": {
-    "API_BASE_URL": "https://example.com/api",
-    "ANOTHER_ENV_VARIABLE": "value"
-  }
+  ]
 }
