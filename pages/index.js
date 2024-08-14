@@ -5,6 +5,7 @@ import axios from 'axios';
 export default function Home() {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
+  const [token, setToken] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -18,9 +19,7 @@ export default function Home() {
           headers: {
             Accept: 'application/json',
             authorization: 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
-            version: '6.1.1',
-            'user-agent': 'okhttp/4.9.3',
-            Host: 'srg-txl-login-controller-service.ext.dp.xl.co.id'
+            version: '6.1.1'
           }
         }
       );
@@ -41,9 +40,7 @@ export default function Home() {
           headers: {
             Accept: 'application/json',
             authorization: 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
-            version: '6.1.1',
-            'user-agent': 'okhttp/4.9.3',
-            Host: 'srg-txl-login-controller-service.ext.dp.xl.co.id'
+            version: '6.1.1'
           }
         }
       );
@@ -51,10 +48,12 @@ export default function Home() {
       console.log('Login response:', response.data);
 
       if (response.data.statusCode === 200) {
-        const { accessToken } = response.data.result;
+        const { accessToken } = response.data.result.data;
         if (accessToken) {
-          console.log('Access Token:', accessToken); // Log token untuk pengujian
-          router.push('/submit-token'); // Arahkan ke halaman submit-token
+          console.log('Access Token:', accessToken);
+          setToken(accessToken); // Update token state
+          localStorage.setItem('authToken', accessToken); // Save token to localStorage
+          router.push('/check-quotas'); // Navigate to check-quotas page
         } else {
           setError('Failed to receive access token');
         }
@@ -73,6 +72,8 @@ export default function Home() {
       <form onSubmit={handleRequestOtp}>
         <input
           type="email"
+          id="email"
+          name="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
@@ -83,6 +84,8 @@ export default function Home() {
       <form onSubmit={handleLogin}>
         <input
           type="text"
+          id="otp"
+          name="otp"
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
           placeholder="OTP"
@@ -90,6 +93,7 @@ export default function Home() {
         />
         <button type="submit">Login</button>
       </form>
+      {token && <p>Token: {token}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
