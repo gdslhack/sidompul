@@ -16,21 +16,19 @@ export default function SubmitOtp() {
           headers: {
             Accept: 'application/json',
             authorization: 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
-            version: '6.1.1',
-            'user-agent': 'okhttp/4.9.3',
-            Host: 'srg-txl-login-controller-service.ext.dp.xl.co.id'
+            version: '6.1.1'
           }
         }
       );
 
-      console.log('API Response:', response.data); // Log respons API untuk memeriksa data
+      console.log('Login response:', response.data);
 
       if (response.data.statusCode === 200) {
-        const { accessToken } = response.data.result;
+        const { accessToken } = response.data.result.data;
         if (accessToken) {
-          localStorage.setItem('authToken', accessToken); // Simpan accessToken di localStorage
-          console.log('Token saved to localStorage:', accessToken); // Log token
-          router.push('/check-quotas'); // Arahkan ke halaman cek kuota
+          console.log('Access Token:', accessToken);
+          localStorage.setItem('authToken', accessToken); // Save token to localStorage
+          router.push('/check-quotas'); // Navigate to check-quotas page
         } else {
           alert('Failed to receive access token');
         }
@@ -39,7 +37,7 @@ export default function SubmitOtp() {
       }
     } catch (error) {
       alert('An error occurred while submitting OTP');
-      console.error('Error submitting OTP:', error);
+      console.error(error);
     }
   };
 
@@ -49,6 +47,8 @@ export default function SubmitOtp() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
+          id="otp"
+          name="otp"
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
           required
