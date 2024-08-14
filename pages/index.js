@@ -48,6 +48,8 @@ export default function Home() {
         }
       );
 
+      console.log('Login response:', response.data);
+
       if (response.data.statusCode === 200) {
         const { accessToken } = response.data.result;
         if (accessToken) {
