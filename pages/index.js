@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 
 export default function Home() {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [token, setToken] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleRequestOtp = async (e) => {
     e.preventDefault();
@@ -22,8 +25,10 @@ export default function Home() {
           }
         }
       );
-      console.log(response.data);
+      console.log('OTP requested:', response.data);
+      setError('');
     } catch (error) {
+      setError('Error requesting OTP');
       console.error('Error requesting OTP:', error);
     }
   };
@@ -43,9 +48,20 @@ export default function Home() {
           }
         }
       );
-      setToken(response.data.token); // Simpan token dari response
-      // Redirect ke halaman cek kuota atau tampilkan form cek kuota
+
+      if (response.data.statusCode === 200) {
+        const receivedToken = response.data.token; // Pastikan token di respons
+        if (receivedToken) {
+          localStorage.setItem('authToken', receivedToken); // Simpan token di localStorage
+          router.push('/check-quotas'); // Arahkan ke halaman cek kuota
+        } else {
+          setError('Failed to receive token');
+        }
+      } else {
+        setError('Failed to login with OTP');
+      }
     } catch (error) {
+      setError('An error occurred while logging in');
       console.error('Error logging in:', error);
     }
   };
@@ -74,6 +90,7 @@ export default function Home() {
         <button type="submit">Login</button>
       </form>
       {token && <p>Token: {token}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 }
