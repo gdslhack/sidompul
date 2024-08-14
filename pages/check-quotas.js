@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { checkQuota } from '../utils/api';
+import axios from 'axios';
 
 export default function CheckQuotas() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [quota, setQuota] = useState('');
-  const [token, setToken] = useState(''); // Ambil token dari state global, context, atau local storage
+  const [token, setToken] = useState('');
 
   useEffect(() => {
-    // Ambil token dari storage atau context
+    // Ambil token dari localStorage
     const storedToken = localStorage.getItem('authToken');
     if (storedToken) {
       setToken(storedToken);
@@ -17,8 +17,15 @@ export default function CheckQuotas() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await checkQuota(phoneNumber, token);
-      setQuota(JSON.stringify(response));
+      const response = await axios.get(
+        `https://srg-txl-utility-service.ext.dp.xl.co.id/v4/package/check/${phoneNumber}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      setQuota(JSON.stringify(response.data));
     } catch (error) {
       setQuota('An error occurred while checking quota');
       console.error(error);
