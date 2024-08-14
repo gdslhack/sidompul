@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { checkQuota } from '../utils/api';
+import axios from 'axios';
 
 export default function CheckQuotas() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -7,8 +7,15 @@ export default function CheckQuotas() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await checkQuota(phoneNumber);
-    setQuota(JSON.stringify(response));
+    try {
+      const response = await axios.get(
+        `https://srg-txl-utility-service.ext.dp.xl.co.id/v4/package/check/${phoneNumber}`
+      );
+      setQuota(JSON.stringify(response.data));
+    } catch (error) {
+      setQuota('An error occurred while checking quota');
+      console.error(error);
+    }
   };
 
   return (
