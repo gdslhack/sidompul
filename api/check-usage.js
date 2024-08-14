@@ -11,17 +11,17 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
+  const imei = '354630570072013'; // Default IMEI
+
   try {
     // Verify OTP to get access token
-    const otpResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/OTP/${otp}/354630570072013?force=true`, {
+    const otpResponse = await fetch(`https://srg-txl-login-controller-service.ext.dp.xl.co.id/v2/auth/email/${email}/${otp}/${imei}?force=true`, {
       method: 'GET',
       headers: {
-        'x-dynatrace': 'MT_3_2_763403741_15-0_a5734da2-0ecb-4c8d-8d21-b008aeec4733_30_456_73',
-        'accept': 'application/json',
-        'authorization': 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
-        'language': 'en',
-        'version': '4.1.2',
-        'user-agent': 'okhttp/3.12.1',
+        'Accept': 'application/json',
+        'Authorization': 'Basic ZGVtb2NsaWVudDpkZW1vY2xpZW50c2VjcmV0',
+        'Version': '6.1.1',
+        'User-Agent': 'okhttp/4.9.3',
       },
     });
 
@@ -36,12 +36,10 @@ export default async function handler(req, res) {
     const usageResponse = await fetch(`https://srg-txl-utility-service.ext.dp.xl.co.id/v4/package/check/${nomerHp}`, {
       method: 'GET',
       headers: {
-        'x-dynatrace': 'MT_3_1_763403741_16-0_a5734da2-0ecb-4c8d-8d21-b008aeec4733_0_396_167',
-        'accept': 'application/json',
-        'authorization': `Bearer ${accessToken}`,
-        'language': 'en',
-        'version': '4.1.2',
-        'user-agent': 'okhttp/3.12.1',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+        'Version': '6.1.1',
+        'User-Agent': 'okhttp/4.9.3',
       },
     });
 
