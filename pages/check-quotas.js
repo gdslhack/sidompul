@@ -16,7 +16,7 @@ export default function CheckQuotas() {
       }
       
       const response = await axios.get(
-        `https://srg-txl-utility-service.ext.dp.xl.co.id/v4/package/check/${phoneNumber}`,
+        `https://srg-txl-utility-service.ext.dp.xl.co.id/v2/package/check/${phoneNumber}`,
         {
           headers: {
             Authorization: `Bearer ${token}`, // Tambahkan token ke header
