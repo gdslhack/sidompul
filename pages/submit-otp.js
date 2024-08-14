@@ -24,9 +24,9 @@ export default function SubmitOtp() {
       );
 
       if (response.data.statusCode === 200) {
-        const { accessToken } = response.data; // Ambil accessToken dari respons
+        const { accessToken } = response.data.result;
         if (accessToken) {
-          localStorage.setItem('authToken', accessToken); // Simpan accessToken di localStorage
+          localStorage.setItem('authToken', accessToken); // Simpan token
           router.push('/check-quotas'); // Arahkan ke halaman cek kuota
         } else {
           alert('Failed to receive access token');
