@@ -23,10 +23,13 @@ export default function SubmitOtp() {
         }
       );
 
+      console.log('API Response:', response.data); // Log respons API untuk memeriksa data
+
       if (response.data.statusCode === 200) {
         const { accessToken } = response.data.result;
         if (accessToken) {
-          localStorage.setItem('authToken', accessToken); // Simpan token
+          localStorage.setItem('authToken', accessToken); // Simpan accessToken di localStorage
+          console.log('Token saved to localStorage:', accessToken); // Log token
           router.push('/check-quotas'); // Arahkan ke halaman cek kuota
         } else {
           alert('Failed to receive access token');
@@ -36,7 +39,7 @@ export default function SubmitOtp() {
       }
     } catch (error) {
       alert('An error occurred while submitting OTP');
-      console.error(error);
+      console.error('Error submitting OTP:', error);
     }
   };
 
